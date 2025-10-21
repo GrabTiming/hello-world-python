@@ -7,6 +7,8 @@
 """
 from fastapi import FastAPI
 import src.db
+from src.apps.common.user_handler import user_router
+
 # 创建 FastAPI 实例
 app = FastAPI(
     title="我的API服务",
@@ -14,6 +16,11 @@ app = FastAPI(
     version="1.0.0"
 )
 
+def register_routes(app):
+    """注册所有路由"""
+    app.include_router(user_router, prefix="/users", tags=["用户"])
+
+register_routes(app)
 
 # 根路径接口
 @app.get("/hello")
