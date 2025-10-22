@@ -14,10 +14,10 @@ class User(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(100), nullable=False)
-    email = Column(String(100), nullable=False, unique=True)
-    phone_number = Column(String(20), nullable=False)
+    email = Column(String(100), nullable=True, unique=True)
+    phone_number = Column(String(20), nullable=True)
     password = Column(String(100), nullable=False)
-    nick_name = Column(String(100), nullable=False)
+    nick_name = Column(String(100), nullable=True)
     created_at = Column(DateTime, default=datetime.now)
 
 

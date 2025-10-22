@@ -33,9 +33,9 @@ class UserRegister(BaseModel):
 
 class UserUpdateDTO(BaseModel):
     username: str
-    password: str
+    password: Optional[str] = None
     email: Optional[str] = None
-    phone: Optional[str] = None
+    phone_number: Optional[str] = None
     nick_name: Optional[str] = None
 
 

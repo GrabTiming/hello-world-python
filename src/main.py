@@ -33,4 +33,10 @@ async def hello():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    import asyncio
+    import sys
+
+    if sys.gettrace() is None:  # 非调试模式
+        uvicorn.run(app, host="127.0.0.1", port=8000)
+    else:  # 调试模式
+        uvicorn.run("src.main:app", host="127.0.0.1", port=8000, reload=False)

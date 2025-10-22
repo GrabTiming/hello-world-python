@@ -38,20 +38,30 @@ class UserService:
         user = self.db.query(User).filter(User.username == username).first()
         return user
 
-    def update_user(self, username: str, user: UserUpdateDTO):
+    def update_user(self, user: UserUpdateDTO):
+        username = user.username
         target_user = self.db.query(User).filter(User.username == username).first()
 
         if not target_user:
             return False
 
         target_user.username = user.username
-        target_user.password = user.password
-        target_user.email = user.email
-        target_user.phone_number = user.phone
-        target_user.nick_name = user.nick_name
+        target_user.password = user.password if user.password else target_user.password
+        target_user.email = user.email if user.email else target_user.email
+        target_user.phone_number = user.phone_number if user.phone_number else target_user.phone_number
+        target_user.nick_name = user.nick_name if user.nick_name else target_user.nick_name
 
         self.db.commit()
         self.db.refresh(target_user)
+        return True
+
+    def delete_user(self,username:str):
+        target_user = self.db.query(User).filter(User.username == username).first()
+
+        if not target_user:
+            return False
+        self.db.delete(target_user)
+        self.db.commit()
         return True
 
 
@@ -72,6 +82,15 @@ async def get_user(username: str, db: Session = Depends(get_db)):
     }
 
     return {"msg":"","data": result_data,"code": 200}
+
+@user_router.post("/update")
+async def get_user(update_info: UserUpdateDTO, service: UserService = Depends()):
+
+    print(update_info)
+    success = service.update_user(update_info)
+
+    return {"msg": "更新成功" if success else "更新失败", "code": 200 if success else 501}
+
 
 
 
